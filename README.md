@@ -25,7 +25,7 @@ launch with no link, goes to the real browser straight away.
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/<owner>/direkiwi.browser-profile.git --enable
+omarchy plugin add https://github.com/<owner>/omarchy-browser-profile.git --enable
 ~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh   # or: install.sh brave-browser.desktop
 ```
 
@@ -33,7 +33,7 @@ omarchy plugin add https://github.com/<owner>/direkiwi.browser-profile.git --ena
 step. To work on the plugin from a local checkout, symlink it in instead:
 
 ```bash
-ln -s ~/personal/direkiwi.browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
+ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
 omarchy-shell shell rescanPlugins
 omarchy plugin enable direkiwi.browser-profile
 ```
