@@ -71,6 +71,27 @@ shell's console/journal rather than in the CLI.
 Third-party plugins get capability-scoped facades instead of the trusted host
 objects. Don't rely on reaching into other plugins' services or auth state.
 
+## Publishing
+
+The plugin is listed at [plugins.omarchy.org](https://plugins.omarchy.org).
+Its submission rules are in `SUBMISSION.md` and `SECURITY.md` of
+`omacom/omarchy-plugin-marketplace`. Keep these true:
+
+- `manifest.json`, `README.md` and `LICENSE` at the repo root. The README needs
+  install and removal steps and lists every dependency.
+- `omarchy plugin validate .` passes, and
+  `/usr/lib/qt6/bin/qmllint -I /usr/share/omarchy/shell <file>.qml` exits 0 for
+  each QML file.
+- Nothing changes user configuration without the user choosing it.
+- The marketplace's security scan flags any mention of `sudo`, `pkexec`,
+  package managers, `systemctl`/`systemd-run` and install scripts, including in
+  the README, for maintainer review. Don't add these without need.
+- An optional `preview.png` (or `.jpg`/`.webp`) at the root is used as the
+  listing image.
+
+After a change is published, request re-verification of the new commit with
+the marketplace's "Plugin verification" issue form.
+
 ## Git
 
 Commit as the repo's configured git user. This repo was split out of
