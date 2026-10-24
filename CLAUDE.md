@@ -83,9 +83,11 @@ Its submission rules are in `SUBMISSION.md` and `SECURITY.md` of
   `/usr/lib/qt6/bin/qmllint -I /usr/share/omarchy/shell <file>.qml` exits 0 for
   each QML file.
 - Nothing changes user configuration without the user choosing it.
-- The marketplace's security scan flags any mention of `sudo`, `pkexec`,
-  package managers, `systemctl`/`systemd-run` and install scripts, including in
-  the README, for maintainer review. Don't add these without need.
+- The marketplace's security scan sends a plugin for maintainer review if any
+  file, docs included, mentions privilege escalation, package installs or
+  systemd service control, or if the repo has an install script. Don't add
+  these without need. The scan's patterns are listed in the marketplace's
+  `SECURITY.md`. Don't copy them into this repo, as quoting them counts too.
 - An optional `preview.png` (or `.jpg`/`.webp`) at the root is used as the
   listing image.
 
