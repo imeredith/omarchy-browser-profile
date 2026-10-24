@@ -8,6 +8,17 @@ Works with Chromium-based browsers: Chrome, Chromium, Brave, Edge and Vivaldi.
 With only one profile, or when the shell isn't running, links open straight in
 the browser as before.
 
+## Requirements
+
+- Omarchy with `omarchy-shell`
+- A Chromium-based browser
+- `jq`, `xdg-utils` and `desktop-file-utils`, which come with Omarchy
+
+`install.sh` changes your default web browser, so it's a separate step you run
+yourself. It writes only `~/.config/direkiwi.browser-profile/` and one
+`<browser>-choose-profile.desktop` entry in `~/.local/share/applications/`, and
+`install.sh --uninstall` removes both.
+
 ## How it works
 
 Omarchy sends links through `omarchy-browser.desktop` to
@@ -29,8 +40,8 @@ omarchy plugin add https://github.com/<owner>/omarchy-browser-profile.git --enab
 ~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh   # or: install.sh brave-browser.desktop
 ```
 
-`omarchy plugin add` doesn't run any scripts, so `install.sh` is a separate
-step. To work on the plugin from a local checkout, symlink it in instead:
+`omarchy plugin add` doesn't run `install.sh` for you. To work on the plugin
+from a local checkout, symlink it in instead:
 
 ```bash
 ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
@@ -38,9 +49,7 @@ omarchy-shell shell rescanPlugins
 omarchy plugin enable direkiwi.browser-profile
 ```
 
-`install.sh --uninstall` puts the previous default browser back. Re-run
-`install.sh` after switching browsers with `omarchy default browser`.
-Run `install.sh --uninstall` before `omarchy plugin remove direkiwi.browser-profile`.
+Re-run `install.sh` after switching browsers with `omarchy default browser`.
 
 ## Keys
 
@@ -52,6 +61,17 @@ Run `install.sh --uninstall` before `omarchy plugin remove direkiwi.browser-prof
 | `Esc`                | Don't open the link            |
 
 The last used profile is selected when the picker opens.
+
+## Remove
+
+```bash
+~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh --uninstall
+omarchy plugin remove direkiwi.browser-profile
+```
+
+`install.sh --uninstall` puts the previous default browser back. Run it before
+removing the plugin, as otherwise links are sent to a launcher that no longer
+exists.
 
 ## License
 
