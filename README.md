@@ -25,14 +25,22 @@ launch with no link, goes to the real browser straight away.
 ## Install
 
 ```bash
-ln -s ~/omarchy-plugins/direkiwi.browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
+omarchy plugin add https://github.com/<owner>/direkiwi.browser-profile.git --enable
+~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh   # or: install.sh brave-browser.desktop
+```
+
+`omarchy plugin add` doesn't run any scripts, so `install.sh` is a separate
+step. To work on the plugin from a local checkout, symlink it in instead:
+
+```bash
+ln -s ~/personal/direkiwi.browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
 omarchy-shell shell rescanPlugins
 omarchy plugin enable direkiwi.browser-profile
-~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh   # or: install.sh brave-browser.desktop
 ```
 
 `install.sh --uninstall` puts the previous default browser back. Re-run
 `install.sh` after switching browsers with `omarchy default browser`.
+Run `install.sh --uninstall` before `omarchy plugin remove direkiwi.browser-profile`.
 
 ## Keys
 
