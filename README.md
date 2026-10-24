@@ -52,3 +52,7 @@ Run `install.sh --uninstall` before `omarchy plugin remove direkiwi.browser-prof
 | `Esc`                | Don't open the link            |
 
 The last used profile is selected when the picker opens.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
