@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "direkiwi.browser-profile",
+  "name": "Browser profile picker",
+  "version": "1.0.0",
+  "author": "Ivan Meredith",
+  "description": "Asks which browser profile to use when a link is opened from outside the browser",
+  "kinds": [
+    "overlay"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "overlay": "ProfilePicker.qml"
+  }
+}

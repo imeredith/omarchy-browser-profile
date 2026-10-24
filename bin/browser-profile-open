@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# Stands in for the real browser as the default web browser (install.sh sets
+# that up). Links opened on their own, which is what xdg-open, the desktop
+# portal and omarchy-launch-browser pass along, go to the profile picker first.
+# Anything else (flags, web apps, a bare launch, a profile the picker chose)
+# goes straight to the real browser.
+
+plugin_id=direkiwi.browser-profile
+config="${XDG_CONFIG_HOME:-$HOME/.config}"
+self=$(realpath "${BASH_SOURCE[0]}")
+
+# omarchy-launch-browser runs the default browser with --help to choose its
+# private-window flag. Answer without starting anything; this isn't Firefox,
+# so it settles on --incognito.
+if [[ ${1:-} == --help ]]; then
+  echo "Usage: browser-profile-open [browser-args...] [url...]"
+  exit 0
+fi
+
+browser=$(cat "$config/$plugin_id/browser" 2>/dev/null)
+browser=${browser:-google-chrome.desktop}
+
+IFS=: read -ra data_dirs <<<"${XDG_DATA_HOME:-$HOME/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+for data_dir in "${data_dirs[@]}"; do
+  [[ -r $data_dir/applications/$browser ]] || continue
+  browser_exec=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' "$data_dir/applications/$browser" | head -1)
+  break
+done
+
+if [[ -z ${browser_exec:-} ]] || ! command -v "$browser_exec" >/dev/null || [[ $(realpath "$(command -v "$browser_exec")") == "$self" ]]; then
+  omarchy-notification-send -g 󰖟 "Browser profile picker" "Can't find the browser to open links in ($browser). Re-run install.sh." 2>/dev/null
+  exit 1
+fi
+
+# Same launch as omarchy-launch-browser: hand the command line to the running
+# browser, or start one outside this process.
+launch() {
+  if ! omarchy-cmd-browser-handoff "$browser_exec" "$@"; then
+    systemd-run --user --quiet --collect --unit="browser-profile-$(date +%s%N)" \
+      --property=StandardOutput=null --property=StandardError=null \
+      uwsm-app -- "$browser_exec" "$@"
+  fi
+}
+
+launch_and_focus() {
+  launch "$@"
+  if [[ -n ${HYPRLAND_INSTANCE_SIGNATURE:-} ]]; then
+    omarchy-hyprland-focus-app "^$(basename "$browser_exec" -stable).*$" || true
+  fi
+}
+
+# The picker's choice. Web apps and other flagged launches aren't focused here,
+# as omarchy-launch-browser and omarchy-launch-webapp see to their own windows.
+if [[ ${1:-} == --profile-directory=* ]]; then
+  launch_and_focus "$@"
+  exit
+fi
+
+urls=()
+for arg in "$@"; do
+  if [[ $arg == -* ]]; then
+    launch "$@"
+    exit
+  fi
+  urls+=("$arg")
+done
+
+if ((${#urls[@]} == 0)); then
+  launch "$@"
+  exit
+fi
+
+# Where each Chromium-based browser keeps its profiles.
+case $(basename "$browser_exec") in
+google-chrome | google-chrome-stable) user_data=google-chrome ;;
+google-chrome-beta) user_data=google-chrome-beta ;;
+google-chrome-unstable) user_data=google-chrome-unstable ;;
+chromium) user_data=chromium ;;
+brave | brave-browser) user_data=BraveSoftware/Brave-Browser ;;
+brave-origin) user_data=BraveSoftware/Brave-Origin ;;
+microsoft-edge | microsoft-edge-stable) user_data=microsoft-edge ;;
+vivaldi | vivaldi-stable) user_data=vivaldi ;;
+*) user_data="" ;;
+esac
+user_data_dir="${CHROME_CONFIG_HOME:-$config}/$user_data"
+
+payload=""
+if [[ -n $user_data && -r "$user_data_dir/Local State" ]]; then
+  payload=$(jq -c --arg launcher "$self" --arg userDataDir "$user_data_dir" '
+    .profile as $p
+    | ($p.info_cache // {}) as $info
+    | ($p.profiles_order // []) as $order
+    | ([$order[] | select($info[.] != null)] + ([$info | keys_unsorted[]] - $order)) as $dirs
+    | {
+        launcher: $launcher,
+        lastUsed: ($p.last_used // ""),
+        profiles: [
+          $dirs[] as $dir
+          | $info[$dir]
+          | select(.is_omitted_from_profile_list != true and .is_ephemeral != true)
+          | {
+              dir: $dir,
+              name: (.name // $dir),
+              email: (.user_name // ""),
+              avatar: ($userDataDir + "/" + $dir + "/Google Profile Picture.png")
+            }
+        ],
+        urls: $ARGS.positional
+      }' "$user_data_dir/Local State" --args "${urls[@]}" 2>/dev/null)
+fi
+
+# Nothing to choose between, or no shell to ask with: open as the browser would.
+if [[ -z $payload ]] || (($(jq '.profiles | length' <<<"$payload") < 2)) ||
+  [[ $(omarchy-shell shell summon "$plugin_id" "$payload" 2>/dev/null) != ok ]]; then
+  launch_and_focus "${urls[@]}"
+fi
