@@ -15,7 +15,7 @@ the browser as before.
 - `jq`, `xdg-utils` and `desktop-file-utils`, which come with Omarchy
 
 `install.sh` changes your default web browser, so it's a separate step you run
-yourself. It writes only `~/.config/direkiwi.browser-profile/` and one
+yourself. It writes only `~/.config/imeredith.browser-profile/` and one
 `<browser>-choose-profile.desktop` entry in `~/.local/share/applications/`, and
 `install.sh --uninstall` removes both.
 
@@ -25,7 +25,7 @@ Omarchy sends links through `omarchy-browser.desktop` to
 `omarchy-launch-browser`, which hands them to the default browser.
 `install.sh` makes `bin/browser-profile-open` the default browser, through a
 `<browser>-choose-profile.desktop` entry, and remembers the real browser in
-`~/.config/direkiwi.browser-profile/browser`.
+`~/.config/imeredith.browser-profile/browser`.
 
 When `browser-profile-open` gets bare links it reads the profiles from the
 browser's `Local State` and summons this overlay. Choosing a profile runs it
@@ -36,17 +36,17 @@ launch with no link, goes to the real browser straight away.
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/<owner>/omarchy-browser-profile.git --enable
-~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh   # or: install.sh brave-browser.desktop
+omarchy plugin add https://github.com/imeredith/omarchy-browser-profile.git --enable
+~/.config/omarchy/plugins/imeredith.browser-profile/install.sh   # or: install.sh brave-browser.desktop
 ```
 
 `omarchy plugin add` doesn't run `install.sh` for you. To work on the plugin
 from a local checkout, symlink it in instead:
 
 ```bash
-ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile
+ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/imeredith.browser-profile
 omarchy-shell shell rescanPlugins
-omarchy plugin enable direkiwi.browser-profile
+omarchy plugin enable imeredith.browser-profile
 ```
 
 Re-run `install.sh` after switching browsers with `omarchy default browser`.
@@ -65,8 +65,8 @@ The last used profile is selected when the picker opens.
 ## Remove
 
 ```bash
-~/.config/omarchy/plugins/direkiwi.browser-profile/install.sh --uninstall
-omarchy plugin remove direkiwi.browser-profile
+~/.config/omarchy/plugins/imeredith.browser-profile/install.sh --uninstall
+omarchy plugin remove imeredith.browser-profile
 ```
 
 `install.sh --uninstall` puts the previous default browser back. Run it before

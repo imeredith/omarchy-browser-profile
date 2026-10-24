@@ -6,7 +6,7 @@
 # Anything else (flags, web apps, a bare launch, a profile the picker chose)
 # goes straight to the real browser.
 
-plugin_id=direkiwi.browser-profile
+plugin_id=imeredith.browser-profile
 config="${XDG_CONFIG_HOME:-$HOME/.config}"
 self=$(realpath "${BASH_SOURCE[0]}")
 

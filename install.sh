@@ -8,7 +8,7 @@
 
 set -e
 
-plugin_id=direkiwi.browser-profile
+plugin_id=imeredith.browser-profile
 config="${XDG_CONFIG_HOME:-$HOME/.config}"
 apps="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
 state_dir="$config/$plugin_id"

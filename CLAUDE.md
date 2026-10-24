@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This repo is one Omarchy shell plugin, `direkiwi.browser-profile`. It's QML
+This repo is one Omarchy shell plugin, `imeredith.browser-profile`. It's QML
 loaded by `omarchy-shell`, a long-running Quickshell process. See README.md for
 the user-facing overview.
 
@@ -13,7 +13,7 @@ the user-facing overview.
 - `bin/browser-profile-open`: stands in for the default browser. It sends bare
   links to the picker and everything else straight to the real browser.
 - `install.sh`: makes `browser-profile-open` the default browser and remembers
-  the real one in `~/.config/direkiwi.browser-profile/browser`.
+  the real one in `~/.config/imeredith.browser-profile/browser`.
   `install.sh --uninstall` reverses it. `omarchy plugin add` never runs it,
   so users run it themselves after installing.
 
@@ -25,7 +25,7 @@ between `bin/browser-profile-open` and `ProfilePicker.qml`.
 - `"schemaVersion": 1` must be the number 1, not the string `"1"`.
 - Required fields: `id`, `name`, `version`, `kinds` (a non-empty array) and
   `entryPoints` (an object).
-- `id` must stay `direkiwi.browser-profile`. The repo is named
+- `id` must stay `imeredith.browser-profile`. The repo is named
   `omarchy-browser-profile`, like other Omarchy plugin repos, but
   `omarchy plugin add` installs it into `~/.config/omarchy/plugins/<id>/`.
   Renaming the id breaks updates for anyone who has it installed. Ids can't
@@ -57,9 +57,9 @@ overwritten on update.
 ## Testing
 
 ```bash
-ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/direkiwi.browser-profile   # once
+ln -s ~/personal/omarchy-browser-profile ~/.config/omarchy/plugins/imeredith.browser-profile   # once
 omarchy-shell shell rescanPlugins
-omarchy plugin enable direkiwi.browser-profile
+omarchy plugin enable imeredith.browser-profile
 omarchy plugin list --json          # confirm it was discovered
 omarchy restart shell               # needed for keepLoaded plugins
 ```

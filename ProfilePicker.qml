@@ -46,7 +46,7 @@ Item {
   function open(payloadJson) {
     var payload = {}
     try { payload = JSON.parse(payloadJson || "{}") || {} } catch (e) {
-      console.warn("direkiwi.browser-profile: bad payload", e)
+      console.warn("imeredith.browser-profile: bad payload", e)
     }
 
     var profiles = Array.isArray(payload.profiles) ? payload.profiles : []
@@ -84,7 +84,7 @@ Item {
   function dismiss() {
     root.opened = false
     if (root.shell && typeof root.shell.hide === "function")
-      root.shell.hide((root.manifest && root.manifest.id) || "direkiwi.browser-profile")
+      root.shell.hide((root.manifest && root.manifest.id) || "imeredith.browser-profile")
   }
 
   function select(delta) {
@@ -115,7 +115,7 @@ Item {
     visible: root.opened
     anchors { top: true; bottom: true; left: true; right: true }
     color: "transparent"
-    WlrLayershell.namespace: "direkiwi-browser-profile"
+    WlrLayershell.namespace: "imeredith-browser-profile"
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     exclusionMode: ExclusionMode.Ignore
